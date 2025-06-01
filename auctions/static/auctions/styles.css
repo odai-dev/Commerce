@@ -1,9 +1,118 @@
+:root {
+  --color-primary: #3B82F6;            
+  --color-primary-hover: #2563EB;
+
+  --color-accent: #F59E0B;          
+  --color-accent-hover: #D97706;
+ 
+  --color-bg: #F9FAFB;                
+  --color-surface: #FFFFFF;           
+  --color-surface-alt: #F3F4F6;       
+  --color-border: #E5E7EB;
+ 
+  --color-text: #111827;
+  --color-text-muted: #6B7280;
+  --color-text-soft: #9CA3AF;
+}
+
+
 body {
     padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: var(--color-bg); 
 }
 h1 {
     text-align: center;
 }
+
+a {
+    color: var(--color-primary);
+}
+a:hover{
+    color: var(--color-primary-hover);
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    background-color: var(--color-bg);
+}
+
+@media (max-width: 600px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  .card {
+    padding: 1rem;
+  }
+  .form-container form {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  h1, h2, h3 {
+    font-size: 1.2rem;
+  }
+}
+
+
+
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+}
+
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  max-height: 180px;
+}
+.listing-title {
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  padding: 5px;
+}
+
+.card p {
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.card p b {
+  color: var(--color-text);
+}
+
+.form-container form {
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+}
+.form-container form .btn {
+    margin-top: 10px;
+    width: 90px;
+}
+

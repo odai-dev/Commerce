@@ -10,5 +10,5 @@ class ListingForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'starting_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image_url': forms.URLInput(attrs={'class': 'form-control'}),
-            'category': forms.TextInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
         }
