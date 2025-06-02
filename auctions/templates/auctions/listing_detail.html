@@ -1,69 +1,73 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
-<div class="listing-detail">
-  <h2 class="listing-detail-title">{{ listing.title }}</h2>
-  <img class="listing-detail-image" src="{{ listing.image_url|default:'https://placehold.co/200x100?text=No+Image' }}" alt="{{ listing.title }}">
-  
-  <div class="listing-detail-info">
-    <span class="listing-detail-label">Description:</span> {{ listing.description }}
-  </div>
-  <div class="listing-detail-info">
-    <span class="listing-detail-label">Category:</span> {{ listing.get_category_display }}
-  </div>
-  <div class="listing-detail-info">
-    <span class="listing-detail-label">Posted by:</span> {{ listing.owner.username }}
-  </div>
-  <div class="listing-detail-info">
-    <span class="listing-detail-label">
-      {% if listing.current_highest_bid %}
-        Current Price:
-      {% else %}
-        Starting Price:
-      {% endif %}
-    </span>
-    ${{ listing.current_highest_bid|default:listing.starting_price }}
-  </div>
-  {% if winner %}
-    <div class="listing-detail-info">
-      <span class="listing-detail-label">Winner:</span> {{ winner.username }}
+<div class="listing-detail-page-container container">
+    <div class="listing-detail">
+      <h2 class="listing-detail-title">{{ listing.title }}</h2>
+      <img class="listing-detail-image" src="{{ listing.image_url|default:'https://placehold.co/600x400?text=No+Image' }}" alt="{{ listing.title }}">
+      
+      <div class="listing-info-grid">
+          <div class="listing-detail-info">
+            <span class="listing-detail-label">Description:</span> {{ listing.description }}
+          </div>
+          <div class="listing-detail-info">
+            <span class="listing-detail-label">Category:</span> {{ listing.get_category_display }}
+          </div>
+          <div class="listing-detail-info">
+            <span class="listing-detail-label">Posted by:</span> {{ listing.owner.username }}
+          </div>
+          <div class="listing-detail-info price-info">
+            <span class="listing-detail-label">
+              {% if listing.current_highest_bid %}
+                Current Price:
+              {% else %}
+                Starting Price:
+              {% endif %}
+            </span>
+            <span class="price-value">${{ listing.current_highest_bid|default:listing.starting_price }}</span>
+          </div>
+          {% if winner %}
+            <div class="listing-detail-info winner-info">
+              <span class="listing-detail-label">Winner:</span> {{ winner.username }}
+            </div>
+          {% endif %}
+      </div>
+
+      <div class="listing-detail-actions">
+        {% if listing.is_active %}
+          {% if not is_owner %}
+            <form method="post" action="{% url 'place_bid' listing.id %}" class="bid-form">
+              {% csrf_token %}
+              <input type="number" step="0.01" name="bid_amount" placeholder="Enter bid" class="form-control bid-input">
+              <button type="submit" class="btn btn-primary">Place bid</button>
+            </form>
+          {% else %}
+            <form method="post" action="{% url 'close_listing' listing.id %}" class="close-auction-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Close Auction</button>
+            </form>
+          {% endif %}
+        {% else %}
+          <p class="alert alert-info error"><strong>This auction is closed.</strong></p>
+        {% endif %}
+      </div>
+
+      <hr class="section-divider">
+
+      <div class="listing-detail-comments">
+        <h3>Comments</h3>
+        <ul class="comment-list">
+          {% for Comment in Comments %}
+            <li class="comment-item"><strong>{{ Comment.commenter.username }}:</strong> {{ Comment.content }}</li>
+          {% empty %}
+            <li class="no-comments">No comments yet.</li>
+          {% endfor %}
+        </ul>
+        <form method="post" action="{% url 'add_comment' listing.id %}" class="comment-form">
+          {% csrf_token %}
+          <textarea name="content" placeholder="Leave a comment" class="form-control"></textarea>
+          <button type="submit" class="btn btn-primary">Comment</button>
+        </form>
+      </div>
     </div>
-  {% endif %}
-
-  <div class="listing-detail-actions">
-    {% if listing.is_active %}
-      {% if not is_owner %}
-        <form method="post" action="{% url 'place_bid' listing.id %}">
-          {% csrf_token %}
-          <input type="number" step="0.01" name="bid_amount" placeholder="Enter bid" class="form-control" style="max-width:150px;display:inline-block;">
-          <button type="submit" class="btn btn-primary">Place bid</button>
-        </form>
-      {% else %}
-        <form method="post" action="{% url 'close_listing' listing.id %}">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger">Close Auction</button>
-        </form>
-      {% endif %}
-    {% else %}
-      <p class="alert error"><strong>This auction is closed.</strong></p>
-    {% endif %}
-  </div>
-
-  <hr>
-
-  <div class="listing-detail-comments">
-    <h3>Comments</h3>
-    <ul>
-      {% for Comment in Comments %}
-        <li><strong>{{ Comment.commenter.username }}:</strong> {{ Comment.content }}</li>
-      {% empty %}
-        <li>No comments yet.</li>
-      {% endfor %}
-    </ul>
-    <form method="post" action="{% url 'add_comment' listing.id %}">
-      {% csrf_token %}
-      <textarea name="content" placeholder="Leave a comment" class="form-control"></textarea>
-      <button type="submit" class="btn btn-primary">Comment</button>
-    </form>
-  </div>
 </div>
 {% endblock %}
