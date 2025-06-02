@@ -1,23 +1,24 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<div class="container">
     <h2>Active Listings</h2>
-
     <div class="listings cards-container">
         {% for listing in listings %}
         <div class="listing card">
-        <h3 class="listing-title">{{listing.title}}</h3>
-        <img src="{{ listing.image_url|default:'https://placehold.co/200x100?text=No+Image' }}" alt="{{ listing.title }} img">
-
-
-        <p><b>Description: </b>{{listing.description}}</p>
-        <p><b>Category: </b>{{listing.category}}</p>
-        <p><b>Price: </b>{{listing.starting_price}}</p>
-        <p><b>Highest bid: </b>{{listing.current_highest_bid}}</p>
-        <p><b>Owner: </b>{{listing.owner}}</p>
-        <p><b>Time posted: </b>{{listing.time_posted}}</p>
+            <a href="{% url 'listing_detail' listing.id %}">
+                <h3 class="listing-title">{{listing.title}}</h3>
+                <img src="{{ listing.image_url|default:'https://placehold.co/200x100?text=No+Image' }}"
+                    alt="{{ listing.title }} img">
+            </a>
+            <p><b>Description:</b> {{listing.description}}</p>
+            <p><b>Category:</b> {{listing.category}}</p>
+            <p><b>Price:</b> ${{listing.starting_price}}</p>
+            <p><b>Highest bid:</b> ${{listing.current_highest_bid}}</p>
+            <p><b>Owner:</b> {{listing.owner}}</p>
+            <p><b>Time posted:</b> {{listing.time_posted}}</p>
         </div>
         {% endfor %}
     </div>
-    
+</div>
 {% endblock %}

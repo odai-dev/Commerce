@@ -3,21 +3,20 @@
 {% block title %}New listing{% endblock %}
 
 {% block body %}
-
-<div class="card form-container">
-<h1>New listing</h1>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-        <div class="form-group">
-            {{ field.label_tag }}
-            {{ field }}
-            {{ field.errors }}
-        </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+<div class="form-container">
+    <h1>New Listing</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="alert error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
 </div>
-
-
 {% endblock %}
