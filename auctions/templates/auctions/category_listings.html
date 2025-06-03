@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listings in {{ category|title }}</h2>
+
+    {% if listings %}
+        <ul class="list-group">
+            {% for listing in listings %}
+                <li class="list-group-item">
+                    <a href="{% url 'listing_detail' listing.id %}">
+                    {{listing.title}}
+                    </a>
+                    - ${{ listing.current_highest_bid|default:listing.starting_price }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No active listings in this category</p>
+    {% endif %}
+{% endblock %}

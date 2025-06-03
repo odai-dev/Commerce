@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -188,4 +189,20 @@ def watchlist(request):
     watchlist = request.user.watchlist.all()
     return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist
+    })
+
+@login_required
+def categories(request):
+    categories = Listing.objects.filter(is_active=True).values('category').annotate(count=Count('id'))
+    print(categories)
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+@login_required
+def category_listings(request, category):
+    listings = Listing.objects.filter(category=category, is_active=True)
+    return render(request, "auctions/category_listings.html", {
+        "category": category,
+        "listings": listings
     })
