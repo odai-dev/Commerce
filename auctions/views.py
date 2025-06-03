@@ -183,3 +183,9 @@ def toggle_watchlist(request, listing_id):
     
     return redirect("listing_detail", listing_id=listing_id)
     
+@login_required
+def watchlist(request):
+    watchlist = request.user.watchlist.all()
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watchlist
+    })
