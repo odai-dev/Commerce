@@ -165,3 +165,21 @@ def add_comment(request, listing_id):
         return redirect("listing_detail", listing_id=listing_id)
     
     return redirect("listing_detail", listing_id=listing_id)
+
+
+@login_required
+def toggle_watchlist(request, listing_id):
+    if request.method != "POST":
+        return redirect("listing_detail", listing_id=listing_id)
+
+    listing = get_object_or_404(Listing, pk=listing_id)
+
+    if listing in request.user.watchlist.all():
+        request.user.watchlist.remove(listing)
+        messages.success(request, "Removed from your watchlist.")
+    else:
+        request.user.watchlist.add(listing)
+        messages.success(request, "Added to your watchlist.")
+    
+    return redirect("listing_detail", listing_id=listing_id)
+    
